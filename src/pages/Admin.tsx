@@ -46,13 +46,19 @@ export default function Admin() {
         method: 'POST',
         body: formData,
       });
+      
       const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.error?.message || "Upload failed");
+      }
+
       setIsUploading(false);
       return data.secure_url;
-    } catch (error) {
+    } catch (error: any) {
       console.error("Upload failed:", error);
       setIsUploading(false);
-      alert("Upload failed. Check console for details.");
+      alert(`Cloudinary Upload Error: ${error.message}. \n\nIMPORTANT: Make sure your Upload Preset is set to 'Unsigned' in your Cloudinary Settings -> Upload tab.`);
       return null;
     }
   };
@@ -74,7 +80,11 @@ export default function Admin() {
 
   const handleAddProject = () => {
     if (projectForm.id && projectForm.title) {
-      addProject(projectForm as ProjectData);
+      const projectToSave = {
+        ...projectForm,
+        gallery: projectForm.gallery || []
+      } as ProjectData;
+      addProject(projectToSave);
       setIsAdding(false);
       setProjectForm({});
     } else {
@@ -84,7 +94,11 @@ export default function Admin() {
 
   const handleUpdateProject = () => {
     if (editingProjectId && projectForm.title) {
-      updateProject(editingProjectId, projectForm as ProjectData);
+      const projectToSave = {
+        ...projectForm,
+        gallery: projectForm.gallery || []
+      } as ProjectData;
+      updateProject(editingProjectId, projectToSave);
       setEditingProjectId(null);
       setProjectForm({});
     }
@@ -95,6 +109,16 @@ export default function Admin() {
     setProjectForm(proj);
     setIsAdding(false);
     setActiveTab('projects');
+  };
+
+  const handleGalleryUpload = async (file: File) => {
+    const url = await handleCloudinaryUpload(file);
+    if (url) {
+      setProjectForm(prev => ({
+        ...prev,
+        gallery: [...(prev.gallery || []), url]
+      }));
+    }
   };
 
   return (
@@ -193,7 +217,7 @@ export default function Admin() {
               <div className="flex justify-between items-center">
                 <h2 className="text-2xl font-serif italic">Management</h2>
                 <button 
-                  onClick={() => { setIsAdding(true); setEditingProjectId(null); setProjectForm({}); }}
+                  onClick={() => { setIsAdding(true); setEditingProjectId(null); setProjectForm({ gallery: [] }); }}
                   className="bg-brand-accent text-white px-6 py-2 rounded-full text-sm font-medium hover:scale-105 transition-transform"
                 >
                   <Plus className="w-4 h-4 inline mr-1" /> New Project
@@ -221,6 +245,30 @@ export default function Admin() {
                         </button>
                       </div>
                       <textarea placeholder="Detailed Description" value={projectForm.description || ''} onChange={e => setProjectForm({...projectForm, description: e.target.value})} rows={5} className="w-full bg-black border border-white/10 p-3 rounded text-white outline-none focus:border-brand-accent resize-none" />
+                    </div>
+                  </div>
+
+                  {/* Gallery Management */}
+                  <div className="mt-8 border-t border-white/5 pt-8">
+                    <div className="flex justify-between items-center mb-4">
+                      <h4 className="text-[10px] uppercase tracking-[0.2em] text-gray-500">Project Gallery</h4>
+                      <label className="cursor-pointer text-brand-accent hover:text-white flex items-center text-xs">
+                        <Plus className="w-3 h-3 mr-1" /> Add Image
+                        <input type="file" className="hidden" onChange={e => e.target.files?.[0] && handleGalleryUpload(e.target.files[0])} />
+                      </label>
+                    </div>
+                    <div className="grid grid-cols-4 md:grid-cols-6 gap-4">
+                      {projectForm.gallery?.map((img, i) => (
+                        <div key={i} className="relative aspect-square rounded overflow-hidden border border-white/10 group">
+                          <img src={img} className="w-full h-full object-cover grayscale" alt="" />
+                          <button 
+                            onClick={() => setProjectForm(prev => ({...prev, gallery: prev.gallery?.filter((_, idx) => idx !== i)}))}
+                            className="absolute inset-0 bg-red-500/80 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      ))}
                     </div>
                   </div>
                   
