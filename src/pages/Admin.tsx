@@ -293,7 +293,7 @@ export default function Admin() {
                 {content.projects.map(proj => (
                   <div key={proj.id} className="group bg-[#0f0f0f] border border-white/5 rounded-2xl overflow-hidden hover:border-brand-accent/50 transition-all">
                     <div className="h-40 relative overflow-hidden">
-                      <img src={proj.coverImage} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" alt="" />
+                      <img src={proj.coverImage} className="w-full h-full object-cover md:grayscale group-hover:grayscale-0 transition-all duration-700" alt="" />
                     </div>
                     <div className="p-5">
                       <div className="flex justify-between items-start">

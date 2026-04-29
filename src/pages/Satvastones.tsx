@@ -43,7 +43,7 @@ export default function Satvastones() {
       </section>
 
       {/* Story Section */}
-      <section className="py-32 px-6 md:px-12 max-w-5xl mx-auto">
+      <section className="py-16 px-6 md:px-12 max-w-5xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-16 md:gap-24 items-center">
           <div>
             <h2 className="text-4xl md:text-5xl font-serif italic mb-8">
@@ -63,7 +63,7 @@ export default function Satvastones() {
             <img 
               src="https://images.unsplash.com/photo-1596944924616-7b38e7cfac36?w=800&q=80" 
               alt="Satvastones Jewelry piece" 
-              className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000"
+              className="w-full h-full object-cover md:grayscale hover:grayscale-0 transition-all duration-1000"
             />
           </div>
         </div>
@@ -74,10 +74,10 @@ export default function Satvastones() {
         <h3 className="text-center text-xs tracking-[0.3em] font-sans uppercase mb-16 opacity-50">Visual Identity</h3>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8">
           <div className="md:col-span-2 aspect-video bg-neutral-900 overflow-hidden rounded-sm border border-white/5">
-            <img src="https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=1200&q=80" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000" alt="Satvastones Brand 1" />
+            <img src="https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=1200&q=80" className="w-full h-full object-cover md:grayscale hover:grayscale-0 transition-all duration-1000" alt="Satvastones Brand 1" />
           </div>
           <div className="aspect-[3/4] md:aspect-auto bg-neutral-900 overflow-hidden rounded-sm border border-white/5">
-            <img src="https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?w=800&q=80" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000" alt="Satvastones Brand 2" />
+            <img src="https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?w=800&q=80" className="w-full h-full object-cover md:grayscale hover:grayscale-0 transition-all duration-1000" alt="Satvastones Brand 2" />
           </div>
         </div>
       </section>

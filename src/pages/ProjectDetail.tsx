@@ -32,7 +32,7 @@ export default function ProjectDetail({ onMenuClick }: ProjectDetailProps) {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white pt-24 pb-32">
+    <div className="min-h-screen bg-black text-white pt-20 pb-16">
       <div className="max-w-6xl mx-auto px-6 md:px-12">
         {/* Navigation */}
         <Link to="/" className="inline-flex items-center gap-2 text-gray-400 hover:text-white transition-colors mb-12 uppercase text-xs tracking-[0.2em] font-sans">
@@ -58,7 +58,7 @@ export default function ProjectDetail({ onMenuClick }: ProjectDetailProps) {
             <img 
               src={project.coverImage} 
               alt={project.title} 
-              className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000" 
+              className="w-full h-full object-cover md:grayscale hover:grayscale-0 transition-all duration-1000" 
               onError={(e) => {
                 console.error("Image failed to load:", project.coverImage);
                 (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1594322436404-5a0526db4d13?q=80&w=1000&auto=format&fit=crop'; // fallback
@@ -79,7 +79,7 @@ export default function ProjectDetail({ onMenuClick }: ProjectDetailProps) {
                 <img 
                   src={img} 
                   alt={`${project.title} gallery ${idx + 1}`} 
-                  className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000" 
+                  className="w-full h-full object-cover md:grayscale hover:grayscale-0 transition-all duration-1000" 
                   onError={(e) => {
                     (e.target as HTMLImageElement).parentElement?.classList.add('hidden');
                   }}

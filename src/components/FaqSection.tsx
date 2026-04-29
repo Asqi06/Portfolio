@@ -65,7 +65,7 @@ export default function FaqSection() {
   };
 
   return (
-    <section className="bg-black text-white w-full py-24 px-4 md:px-8 lg:px-16 overflow-hidden max-w-7xl mx-auto flex flex-col items-center">
+    <section className="bg-black text-white w-full py-16 px-4 md:px-8 lg:px-16 overflow-hidden max-w-7xl mx-auto flex flex-col items-center">
       
       {/* Header */}
       <div className="mb-20 text-center">

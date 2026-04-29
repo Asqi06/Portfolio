@@ -7,9 +7,9 @@ export default function PortfolioSection() {
   const { content } = useAdmin();
   const projects = content.projects;
   return (
-    <section className="bg-black text-white py-24 px-8 md:px-16 w-full max-w-7xl mx-auto">
+    <section className="bg-black text-white py-16 px-8 md:px-16 w-full max-w-7xl mx-auto">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 border-b border-white/5 pb-12 gap-8">
+      <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 border-b border-white/5 pb-10 gap-8">
         <div>
           <h3 className="text-gray-500 text-xs tracking-[0.2em] uppercase mb-6 font-medium">Portfolio</h3>
           <h2 className="text-5xl md:text-7xl font-serif leading-tight">

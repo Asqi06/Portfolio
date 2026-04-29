@@ -14,7 +14,7 @@ export default function BrandSection() {
   return (
     <section className="bg-black text-white pt-0 pb-16 md:pb-24 font-serif overflow-hidden relative">
       {/* Horizontal Ticker */}
-      <div className="w-full border-y border-white/5 py-4 mb-16 md:mb-24 overflow-hidden flex bg-[#0a0a0a]">
+      <div className="w-full border-y border-white/5 py-4 mb-10 md:mb-16 overflow-hidden flex bg-[#0a0a0a]">
         <motion.div 
           animate={{ x: [0, -1000] }}
           transition={{ duration: 20, repeat: Infinity, ease: "linear" }}

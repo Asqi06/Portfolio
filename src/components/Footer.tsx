@@ -53,7 +53,7 @@ export default function Footer() {
       </div>
 
       {/* Main Footer Content */}
-      <div className="w-full max-w-7xl mx-auto px-6 md:px-12 lg:px-20 py-24 flex flex-col lg:flex-row justify-between gap-16 lg:gap-8">
+      <div className="w-full max-w-7xl mx-auto px-6 md:px-12 lg:px-20 py-16 flex flex-col lg:flex-row justify-between gap-16 lg:gap-8">
         
         {/* Left Side: Let's Work Together */}
         <div className="flex-1">

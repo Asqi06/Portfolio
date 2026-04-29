@@ -1,6 +1,6 @@
 export default function AboutSection() {
   return (
-    <section className="bg-black w-full py-24 px-8 md:px-16 overflow-hidden relative max-w-7xl mx-auto min-h-[90vh] flex flex-col justify-center">
+    <section className="bg-black w-full py-16 px-8 md:px-16 overflow-hidden relative max-w-7xl mx-auto min-h-[80vh] flex flex-col justify-center">
       
       {/* Top Row: Small Image and Text Paragraph */}
       <div className="flex flex-col md:flex-row justify-between items-start w-full relative z-10 mb-20 md:mb-10 lg:mb-0">
@@ -35,7 +35,7 @@ export default function AboutSection() {
         </div>
 
         {/* Huge Text */}
-        <div className="relative z-10 w-full pt-10 md:pt-32 pb-10">
+        <div className="relative z-10 w-full pt-10 md:pt-20 pb-10">
           <h2 className="text-5xl md:text-7xl lg:text-[7.5rem] font-serif leading-[1.1] tracking-tight">
             <span className="block italic text-[#e6ddd0] drop-shadow-xl">CREATIVE BUILDER</span>
             <span className="block italic text-brand-accent md:ml-32 lg:ml-48 drop-shadow-xl">ANIRUDH VERMA</span>
