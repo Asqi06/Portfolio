@@ -88,7 +88,7 @@ const defaultContent: SiteContent = {
     },
     {
       id: '2',
-      quote: '"Working with Anirudh on our product visuals was a game-changer. He doesn\\'t just design; he builds a complete vibe that audiences resonate with instantly."',
+      quote: '"Working with Anirudh on our product visuals was a game-changer. He doesn\'t just design; he builds a complete vibe that audiences resonate with instantly."',
       name: 'Alexo Smith',
       role: 'Co-founder of this company',
       stat: '3x',
