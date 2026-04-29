@@ -1,5 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { projects as defaultProjects, ProjectData } from '../data/projects';
+import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { db } from '../lib/firebase';
 
 interface FooterLink {
   label: string;
@@ -62,21 +64,43 @@ interface AdminContextType {
 const AdminContext = createContext<AdminContextType | undefined>(undefined);
 
 export function AdminProvider({ children }: { children: React.ReactNode }) {
-  const [content, setContent] = useState<SiteContent>(() => {
-    const saved = localStorage.getItem('portfolio-content');
-    if (saved) {
-      try {
-        return JSON.parse(saved);
-      } catch (e) {
-        console.error("Error parsing saved content", e);
-      }
-    }
-    return defaultContent;
-  });
+  const [content, setContent] = useState<SiteContent>(defaultContent);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
-    localStorage.setItem('portfolio-content', JSON.stringify(content));
-  }, [content]);
+    const loadContent = async () => {
+      try {
+        const docRef = doc(db, 'portfolio', 'content');
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          setContent(docSnap.data() as SiteContent);
+        } else {
+          // Initialize document if it doesn't exist
+          await setDoc(docRef, defaultContent);
+        }
+      } catch (error) {
+        console.error("Error fetching content from Firebase:", error);
+      } finally {
+        setIsLoaded(true);
+      }
+    };
+    
+    loadContent();
+  }, []);
+
+  useEffect(() => {
+    if (!isLoaded) return;
+    
+    const timer = setTimeout(async () => {
+      try {
+        await setDoc(doc(db, 'portfolio', 'content'), content);
+      } catch (error) {
+        console.error("Error saving content to Firebase:", error);
+      }
+    }, 1500);
+
+    return () => clearTimeout(timer);
+  }, [content, isLoaded]);
 
   const updateContent = (newContent: Partial<SiteContent>) => {
     setContent(prev => ({ ...prev, ...newContent }));
