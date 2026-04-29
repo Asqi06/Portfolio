@@ -292,16 +292,24 @@ export default function Admin() {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {content.projects.map(proj => (
                   <div key={proj.id} className="group bg-[#0f0f0f] border border-white/5 rounded-2xl overflow-hidden hover:border-brand-accent/50 transition-all">
-                    <div className="h-40 relative">
-                      <img src={proj.coverImage} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all" alt="" />
-                      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-4">
-                        <button onClick={() => openEditProject(proj)} className="w-10 h-10 rounded-full bg-white text-black flex items-center justify-center hover:scale-110 transition-transform"><Plus className="w-5 h-5 rotate-45" /></button>
-                        <button onClick={() => deleteProject(proj.id)} className="w-10 h-10 rounded-full bg-red-500 text-white flex items-center justify-center hover:scale-110 transition-transform"><Trash2 className="w-5 h-5" /></button>
-                      </div>
+                    <div className="h-40 relative overflow-hidden">
+                      <img src={proj.coverImage} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" alt="" />
                     </div>
                     <div className="p-5">
-                      <h4 className="font-serif italic text-lg">{proj.title}</h4>
-                      <p className="text-xs text-gray-500 uppercase tracking-widest mt-1">{proj.category}</p>
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <h4 className="font-serif italic text-lg">{proj.title}</h4>
+                          <p className="text-xs text-gray-500 uppercase tracking-widest mt-1">{proj.category}</p>
+                        </div>
+                        <div className="flex gap-2">
+                          <button onClick={() => openEditProject(proj)} title="Edit Project" className="p-2 bg-white/5 rounded-full hover:bg-brand-accent transition-colors text-gray-400 hover:text-white">
+                            <ImageIcon className="w-4 h-4" />
+                          </button>
+                          <button onClick={() => deleteProject(proj.id)} title="Delete Project" className="p-2 bg-white/5 rounded-full hover:bg-red-500 transition-colors text-gray-400 hover:text-white">
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 ))}
