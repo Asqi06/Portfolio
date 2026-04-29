@@ -1,4 +1,7 @@
+import { useAdmin } from '../context/AdminContext';
+
 export default function AboutSection() {
+  const { content } = useAdmin();
   return (
     <section className="bg-black w-full py-16 px-8 md:px-16 overflow-hidden relative max-w-7xl mx-auto min-h-[80vh] flex flex-col justify-center">
       
@@ -7,7 +10,7 @@ export default function AboutSection() {
         
         <div className="w-56 h-72 md:w-72 md:h-[380px] shrink-0">
           <img 
-            src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=800&q=80" 
+            src={content.aboutImageSmall}
             alt="Portrait red background"
             className="w-full h-full object-cover"
           />
@@ -28,7 +31,7 @@ export default function AboutSection() {
         {/* Large Image - position absolute on desktop to allow overlap */}
         <div className="w-full h-[500px] md:absolute md:right-0 md:top-[-150px] md:w-[350px] md:h-[500px] lg:w-[450px] lg:h-[650px] z-0 order-first md:order-last mb-10 md:mb-0">
           <img 
-            src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=800&q=80" 
+            src={content.aboutImageLarge}
             alt="Editorial portrait"
             className="w-full h-full object-cover grayscale-[20%]"
           />

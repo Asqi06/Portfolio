@@ -45,7 +45,7 @@ export default function BrandSection() {
           className="absolute top-10 md:top-20 -left-5 md:-left-10 w-24 h-32 md:w-48 md:h-64 bg-neutral-900 border border-white/5 shadow-2xl z-0 overflow-hidden"
         >
            <img 
-             src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=1000&auto=format&fit=crop" 
+             src={content.brandImageLeft}
              alt="process" 
              className="w-full h-full object-cover grayscale opacity-60" 
              referrerPolicy="no-referrer"
@@ -61,7 +61,7 @@ export default function BrandSection() {
           className="absolute bottom-10 md:bottom-20 -right-5 md:-right-10 w-24 h-32 md:w-48 md:h-64 bg-neutral-900 border border-white/5 shadow-2xl z-0 overflow-hidden"
         >
            <img 
-             src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1000&auto=format&fit=crop" 
+             src={content.brandImageRight}
              alt="art" 
              className="w-full h-full object-cover grayscale opacity-60" 
              referrerPolicy="no-referrer"

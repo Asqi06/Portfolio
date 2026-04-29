@@ -1,19 +1,28 @@
 import { useState, useRef } from 'react';
-import { useAdmin } from '../context/AdminContext';
+import { useAdmin, TestimonialData } from '../context/AdminContext';
 import { ProjectData } from '../data/projects';
 import { ArrowLeft, Plus, Save, Trash2, Image as ImageIcon, Upload, Link as LinkIcon, Settings, Layout, Briefcase, Info } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export default function Admin() {
-  const { content, updateContent, addProject, updateProject, deleteProject } = useAdmin();
+  const { content, updateContent, addProject, updateProject, deleteProject, addTestimonial, updateTestimonial, deleteTestimonial } = useAdmin();
   
-  const [activeTab, setActiveTab] = useState<'general' | 'projects' | 'footer' | 'cloudinary'>('general');
+  const [activeTab, setActiveTab] = useState<'general' | 'projects' | 'images' | 'testimonials' | 'footer' | 'cloudinary'>('general');
   
   // General Site State
   const [heroLine1, setHeroLine1] = useState(content.heroLine1);
   const [heroLine2, setHeroLine2] = useState(content.heroLine2);
   const [heroAccent, setHeroAccent] = useState(content.heroAccent);
   const [aboutText, setAboutText] = useState(content.aboutText);
+  
+  // Images State
+  const [heroImageLeft, setHeroImageLeft] = useState(content.heroImageLeft);
+  const [heroImageCenter, setHeroImageCenter] = useState(content.heroImageCenter);
+  const [heroImageRight, setHeroImageRight] = useState(content.heroImageRight);
+  const [brandImageLeft, setBrandImageLeft] = useState(content.brandImageLeft);
+  const [brandImageRight, setBrandImageRight] = useState(content.brandImageRight);
+  const [aboutImageSmall, setAboutImageSmall] = useState(content.aboutImageSmall);
+  const [aboutImageLarge, setAboutImageLarge] = useState(content.aboutImageLarge);
   
   // Cloudinary State
   const [cloudName, setCloudName] = useState(content.cloudinaryCloudName);
@@ -26,6 +35,12 @@ export default function Admin() {
   const [isAdding, setIsAdding] = useState(false);
   const [editingProjectId, setEditingProjectId] = useState<string | null>(null);
   const [projectForm, setProjectForm] = useState<Partial<ProjectData>>({});
+  
+  // Testimonial State
+  const [isAddingTestimonial, setIsAddingTestimonial] = useState(false);
+  const [editingTestimonialId, setEditingTestimonialId] = useState<string | null>(null);
+  const [testimonialForm, setTestimonialForm] = useState<Partial<TestimonialData>>({});
+  const testimonialFileInputRef = useRef<HTMLInputElement>(null);
   
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isUploading, setIsUploading] = useState(false);
@@ -66,6 +81,15 @@ export default function Admin() {
   const handleSaveGeneral = () => {
     updateContent({ heroLine1, heroLine2, heroAccent, aboutText });
     alert("General settings saved!");
+  };
+
+  const handleSaveImages = () => {
+    updateContent({
+      heroImageLeft, heroImageCenter, heroImageRight,
+      brandImageLeft, brandImageRight,
+      aboutImageSmall, aboutImageLarge
+    });
+    alert("Images settings saved!");
   };
 
   const handleSaveCloudinary = () => {
@@ -111,6 +135,31 @@ export default function Admin() {
     setActiveTab('projects');
   };
 
+  const handleAddTestimonial = () => {
+    if (testimonialForm.id && testimonialForm.name && testimonialForm.quote) {
+      addTestimonial(testimonialForm as TestimonialData);
+      setIsAddingTestimonial(false);
+      setTestimonialForm({});
+    } else {
+      alert('ID, Name, and Quote are required');
+    }
+  };
+
+  const handleUpdateTestimonial = () => {
+    if (editingTestimonialId && testimonialForm.name && testimonialForm.quote) {
+      updateTestimonial(editingTestimonialId, testimonialForm as TestimonialData);
+      setEditingTestimonialId(null);
+      setTestimonialForm({});
+    }
+  };
+
+  const openEditTestimonial = (t: TestimonialData) => {
+    setEditingTestimonialId(t.id);
+    setTestimonialForm(t);
+    setIsAddingTestimonial(false);
+    setActiveTab('testimonials');
+  };
+
   const handleGalleryUpload = async (file: File) => {
     const url = await handleCloudinaryUpload(file);
     if (url) {
@@ -138,6 +187,12 @@ export default function Admin() {
             </button>
             <button onClick={() => setActiveTab('projects')} className={`px-4 py-2 rounded-md text-xs tracking-widest uppercase flex items-center transition-all ${activeTab === 'projects' ? 'bg-brand-accent text-white' : 'text-gray-500 hover:text-white'}`}>
               <Briefcase className="w-3 h-3 mr-2" /> Projects
+            </button>
+            <button onClick={() => setActiveTab('images')} className={`px-4 py-2 rounded-md text-xs tracking-widest uppercase flex items-center transition-all ${activeTab === 'images' ? 'bg-brand-accent text-white' : 'text-gray-500 hover:text-white'}`}>
+              <ImageIcon className="w-3 h-3 mr-2" /> Images
+            </button>
+            <button onClick={() => setActiveTab('testimonials')} className={`px-4 py-2 rounded-md text-xs tracking-widest uppercase flex items-center transition-all ${activeTab === 'testimonials' ? 'bg-brand-accent text-white' : 'text-gray-500 hover:text-white'}`}>
+              <Info className="w-3 h-3 mr-2" /> Testimonials
             </button>
             <button onClick={() => setActiveTab('footer')} className={`px-4 py-2 rounded-md text-xs tracking-widest uppercase flex items-center transition-all ${activeTab === 'footer' ? 'bg-brand-accent text-white' : 'text-gray-500 hover:text-white'}`}>
               <LinkIcon className="w-3 h-3 mr-2" /> Footer
@@ -185,6 +240,59 @@ export default function Admin() {
             </div>
           )}
 
+          {activeTab === 'images' && (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              <div className="bg-[#0f0f0f] border border-white/5 p-8 rounded-2xl">
+                <h2 className="text-xl font-serif italic mb-6 text-white/80">Hero Section Images</h2>
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <label className="text-[10px] uppercase tracking-[0.2em] text-gray-500">Left Abstract Image</label>
+                    <input value={heroImageLeft} onChange={e => setHeroImageLeft(e.target.value)} className="w-full bg-black border border-white/10 p-3 rounded text-white focus:border-brand-accent outline-none" />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] uppercase tracking-[0.2em] text-gray-500">Center Main Portrait</label>
+                    <input value={heroImageCenter} onChange={e => setHeroImageCenter(e.target.value)} className="w-full bg-black border border-white/10 p-3 rounded text-white focus:border-brand-accent outline-none" />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] uppercase tracking-[0.2em] text-gray-500">Right Abstract Image</label>
+                    <input value={heroImageRight} onChange={e => setHeroImageRight(e.target.value)} className="w-full bg-black border border-white/10 p-3 rounded text-white focus:border-brand-accent outline-none" />
+                  </div>
+                </div>
+              </div>
+              <div className="space-y-8">
+                <div className="bg-[#0f0f0f] border border-white/5 p-8 rounded-2xl">
+                  <h2 className="text-xl font-serif italic mb-6 text-white/80">Brand Section Images</h2>
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <label className="text-[10px] uppercase tracking-[0.2em] text-gray-500">Left Process Image</label>
+                      <input value={brandImageLeft} onChange={e => setBrandImageLeft(e.target.value)} className="w-full bg-black border border-white/10 p-3 rounded text-white focus:border-brand-accent outline-none" />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-[10px] uppercase tracking-[0.2em] text-gray-500">Right Art Image</label>
+                      <input value={brandImageRight} onChange={e => setBrandImageRight(e.target.value)} className="w-full bg-black border border-white/10 p-3 rounded text-white focus:border-brand-accent outline-none" />
+                    </div>
+                  </div>
+                </div>
+                <div className="bg-[#0f0f0f] border border-white/5 p-8 rounded-2xl">
+                  <h2 className="text-xl font-serif italic mb-6 text-white/80">About Section Images</h2>
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <label className="text-[10px] uppercase tracking-[0.2em] text-gray-500">Small Top Image</label>
+                      <input value={aboutImageSmall} onChange={e => setAboutImageSmall(e.target.value)} className="w-full bg-black border border-white/10 p-3 rounded text-white focus:border-brand-accent outline-none" />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-[10px] uppercase tracking-[0.2em] text-gray-500">Large Editorial Image</label>
+                      <input value={aboutImageLarge} onChange={e => setAboutImageLarge(e.target.value)} className="w-full bg-black border border-white/10 p-3 rounded text-white focus:border-brand-accent outline-none" />
+                    </div>
+                    <button onClick={handleSaveImages} className="w-full mt-6 bg-brand-accent text-white py-4 rounded-xl font-medium flex items-center justify-center hover:scale-[1.02] transition-transform active:scale-[0.98]">
+                      <Save className="w-4 h-4 mr-2" /> Save Image Links
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
           {activeTab === 'cloudinary' && (
             <div className="max-w-2xl mx-auto bg-[#0f0f0f] border border-white/5 p-8 rounded-2xl">
               <div className="flex items-center gap-3 mb-6">
@@ -208,6 +316,88 @@ export default function Admin() {
                 <button onClick={handleSaveCloudinary} className="w-full bg-white text-black py-4 rounded-xl font-bold uppercase tracking-widest text-xs hover:bg-brand-accent hover:text-white transition-colors">
                   <Save className="w-4 h-4 inline mr-2" /> Connect Cloudinary
                 </button>
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'testimonials' && (
+            <div className="space-y-8">
+              <div className="flex justify-between items-center">
+                <h2 className="text-2xl font-serif italic">Testimonials Management</h2>
+                <button 
+                  onClick={() => { setIsAddingTestimonial(true); setEditingTestimonialId(null); setTestimonialForm({}); }}
+                  className="bg-brand-accent text-white px-6 py-2 rounded-full text-sm font-medium hover:scale-105 transition-transform"
+                >
+                  <Plus className="w-4 h-4 inline mr-1" /> New Testimonial
+                </button>
+              </div>
+
+              {(isAddingTestimonial || editingTestimonialId) && (
+                <div className="bg-[#0f0f0f] border border-brand-accent/20 p-8 rounded-2xl animate-in zoom-in-95 duration-300">
+                  <h3 className="text-lg font-serif italic mb-6">{editingTestimonialId ? 'Edit Testimonial' : 'Add New Testimonial'}</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-4">
+                      <input placeholder="Unique ID (e.g. 1)" value={testimonialForm.id || ''} onChange={e => setTestimonialForm({...testimonialForm, id: e.target.value})} className="w-full bg-black border border-white/10 p-3 rounded text-white outline-none focus:border-brand-accent" />
+                      <input placeholder="Client Name" value={testimonialForm.name || ''} onChange={e => setTestimonialForm({...testimonialForm, name: e.target.value})} className="w-full bg-black border border-white/10 p-3 rounded text-white outline-none focus:border-brand-accent" />
+                      <input placeholder="Role / Company" value={testimonialForm.role || ''} onChange={e => setTestimonialForm({...testimonialForm, role: e.target.value})} className="w-full bg-black border border-white/10 p-3 rounded text-white outline-none focus:border-brand-accent" />
+                      <input placeholder="Stat (e.g. 100%)" value={testimonialForm.stat || ''} onChange={e => setTestimonialForm({...testimonialForm, stat: e.target.value})} className="w-full bg-black border border-white/10 p-3 rounded text-white outline-none focus:border-brand-accent" />
+                      <input placeholder="Stat Description" value={testimonialForm.statDesc || ''} onChange={e => setTestimonialForm({...testimonialForm, statDesc: e.target.value})} className="w-full bg-black border border-white/10 p-3 rounded text-white outline-none focus:border-brand-accent" />
+                    </div>
+                    <div className="space-y-4">
+                      <div className="relative group">
+                        <input placeholder="Client Image URL" value={testimonialForm.image || ''} onChange={e => setTestimonialForm({...testimonialForm, image: e.target.value})} className="w-full bg-black border border-white/10 p-3 rounded text-white outline-none focus:border-brand-accent pr-12" />
+                        <button 
+                          onClick={() => testimonialFileInputRef.current?.click()}
+                          className="absolute right-2 top-2 p-1.5 bg-[#111] rounded hover:bg-brand-accent transition-colors"
+                        >
+                          <Upload className="w-4 h-4" />
+                        </button>
+                      </div>
+                      <textarea placeholder="Quote" value={testimonialForm.quote || ''} onChange={e => setTestimonialForm({...testimonialForm, quote: e.target.value})} rows={6} className="w-full bg-black border border-white/10 p-3 rounded text-white outline-none focus:border-brand-accent resize-none" />
+                    </div>
+                  </div>
+                  
+                  <div className="mt-8 flex gap-4">
+                    <button onClick={editingTestimonialId ? handleUpdateTestimonial : handleAddTestimonial} className="flex-1 bg-brand-accent text-white py-3 rounded-xl font-bold">
+                      {editingTestimonialId ? 'Save Changes' : 'Create Testimonial'}
+                    </button>
+                    <button onClick={() => { setIsAddingTestimonial(false); setEditingTestimonialId(null); }} className="px-8 border border-white/10 rounded-xl hover:bg-white/5 transition-colors">Cancel</button>
+                  </div>
+                  
+                  <input type="file" ref={testimonialFileInputRef} className="hidden" onChange={async (e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      const url = await handleCloudinaryUpload(file);
+                      if (url) setTestimonialForm({...testimonialForm, image: url});
+                    }
+                  }} />
+                </div>
+              )}
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {content.testimonials?.map(t => (
+                  <div key={t.id} className="group bg-[#0f0f0f] border border-white/5 rounded-2xl overflow-hidden hover:border-brand-accent/50 transition-all">
+                    <div className="h-40 relative overflow-hidden">
+                      <img src={t.image} className="w-full h-full object-cover md:grayscale group-hover:grayscale-0 transition-all duration-700" alt="" />
+                    </div>
+                    <div className="p-5">
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <h4 className="font-serif italic text-lg">{t.name}</h4>
+                          <p className="text-xs text-gray-500 uppercase tracking-widest mt-1">{t.role}</p>
+                        </div>
+                        <div className="flex gap-2">
+                          <button onClick={() => openEditTestimonial(t)} title="Edit Testimonial" className="p-2 bg-white/5 rounded-full hover:bg-brand-accent transition-colors text-gray-400 hover:text-white">
+                            <ImageIcon className="w-4 h-4" />
+                          </button>
+                          <button onClick={() => deleteTestimonial(t.id)} title="Delete Testimonial" className="p-2 bg-white/5 rounded-full hover:bg-red-500 transition-colors text-gray-400 hover:text-white">
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           )}

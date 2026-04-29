@@ -45,7 +45,7 @@ export default function Hero({ onMenuClick }: HeroProps) {
           <div className="absolute left-0 top-[60%] -translate-y-1/2 w-[25vw] h-[30vh] md:w-[15vw] md:h-[40vh] opacity-20 md:opacity-40 select-none z-0 pointer-events-none">
             <div className="relative h-full w-full bg-neutral-900 overflow-hidden">
                <img 
-                 src="https://images.unsplash.com/photo-1542038784456-1ea8e935640e?q=80&w=1000&auto=format&fit=crop" 
+                 src={content.heroImageLeft}
                  className="w-full h-full object-cover grayscale" 
                  alt="architecture"
                  referrerPolicy="no-referrer"
@@ -62,7 +62,7 @@ export default function Hero({ onMenuClick }: HeroProps) {
           >
             <div className="h-full w-full bg-neutral-900 overflow-hidden relative shadow-2xl border border-white/5 rounded-md">
               <img 
-                src="/portrait.jpg" 
+                src={content.heroImageCenter}
                 alt="Anirudh Verma" 
                 className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-1000"
               />
@@ -86,7 +86,7 @@ export default function Hero({ onMenuClick }: HeroProps) {
             <div className="relative opacity-20 md:opacity-40 select-none">
                <div className="w-[25vw] h-[20vh] md:w-[15vw] md:h-[30vh] bg-neutral-900 border border-white/5 overflow-hidden">
                   <img 
-                    src="https://images.unsplash.com/photo-1518152006812-edab29b069ac?q=80&w=1000&auto=format&fit=crop" 
+                    src={content.heroImageRight}
                     className="w-full h-full object-cover grayscale" 
                     alt="abstract"
                     referrerPolicy="no-referrer"

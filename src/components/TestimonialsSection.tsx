@@ -1,25 +1,9 @@
 import { ChevronRight } from 'lucide-react';
-
-const testimonials = [
-  {
-    quote: '"Anirudh completely elevated our brand vision. His understanding of 3D aesthetics and minimal luxury helped us craft an identity that truly stands out in the market."',
-    name: 'Daniel Perce',
-    role: 'Founder, Aura',
-    stat: '100%',
-    statDesc: 'Verified Customer Testimonials',
-    image: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=800&q=80',
-  },
-  {
-    quote: '"Working with Anirudh on our product visuals was a game-changer. He doesn\'t just design; he builds a complete vibe that audiences resonate with instantly."',
-    name: 'Alexo Smith',
-    role: 'Co-founder of this company',
-    stat: '3x',
-    statDesc: 'Faster, smarter and better',
-    image: 'https://images.unsplash.com/photo-1531384441138-2736e62e0919?w=800&q=80',
-  }
-];
+import { useAdmin } from '../context/AdminContext';
 
 export default function TestimonialsSection() {
+  const { content } = useAdmin();
+  const testimonials = content.testimonials;
   return (
     <section className="bg-black text-white w-full py-16 px-4 md:px-8 lg:px-16 overflow-hidden max-w-5xl mx-auto flex flex-col items-center">
       
